@@ -41,11 +41,11 @@ export default function DocItem(props: Props): JSX.Element {
 
     return (
       <div className="row">
-        <div className={clsx("col", api ? "col--7" : "col--12")}>
+        <div className={clsx("col", api ? "col--6" : "col--12")}>
           <MDXComponent />
         </div>
         {api && (
-          <div className="col col--5">
+          <div className="col col--6">
             <ApiDemoPanel item={api} infoPath={infoPath} />
           </div>
         )}

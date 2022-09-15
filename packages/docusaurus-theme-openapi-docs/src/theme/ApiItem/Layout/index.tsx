@@ -63,11 +63,11 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
             <DocVersionBadge />
             {docTOC.mobile}
             <DocItemContent>{children}</DocItemContent>
-            <div className={clsx("col", api ? "col--7" : "col--12")}>
+            <div className={clsx("col", api ? "col--6" : "col--12")}>
               <DocItemFooter />
             </div>
           </article>
-          <div className={clsx("col", api ? "col--7" : "col--12")}>
+          <div className={clsx("col", api ? "col--6" : "col--12")}>
             <DocItemPaginator />
           </div>
         </div>

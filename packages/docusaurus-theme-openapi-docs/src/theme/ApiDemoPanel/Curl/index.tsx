@@ -1,21 +1,16 @@
-/* ============================================================================
- * Copyright (c) Palo Alto Networks
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- * ========================================================================== */
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import codegen from "@paloaltonetworks/postman-code-generators";
 import sdk from "@paloaltonetworks/postman-collection";
 import CodeBlock from "@theme/CodeBlock";
 import clsx from "clsx";
+import JSONFormatter from "json-formatter-js";
 
 import CodeTabs from "../CodeTabs";
 import { useTypedSelector } from "../hooks";
 import buildPostmanRequest from "./../buildPostmanRequest";
+import { cURL_to_fetch } from "./curl_to_fetch.js";
 import styles from "./styles.module.css";
 
 interface Language {
@@ -26,6 +21,9 @@ interface Language {
   options?: { [key: string]: boolean };
   source?: string;
 }
+
+type ResponseOption = "collapsable" | "raw";
+type ResponsedState = "no" | "success" | "error";
 
 export const languageSet: Language[] = [
   {
@@ -70,36 +68,36 @@ export const languageSet: Language[] = [
     },
     variant: "axios",
   },
-  {
-    highlight: "ruby",
-    language: "ruby",
-    logoClass: "ruby",
-    options: {
-      followRedirect: true,
-      trimRequestBody: true,
-    },
-    variant: "Net::HTTP",
-  },
-  {
-    highlight: "csharp",
-    language: "csharp",
-    logoClass: "csharp",
-    options: {
-      followRedirect: true,
-      trimRequestBody: true,
-    },
-    variant: "RestSharp",
-  },
-  {
-    highlight: "php",
-    language: "php",
-    logoClass: "php",
-    options: {
-      followRedirect: true,
-      trimRequestBody: true,
-    },
-    variant: "cURL",
-  },
+  // {
+  //   highlight: "ruby",
+  //   language: "ruby",
+  //   logoClass: "ruby",
+  //   options: {
+  //     followRedirect: true,
+  //     trimRequestBody: true,
+  //   },
+  //   variant: "Net::HTTP",
+  // },
+  // {
+  //   highlight: "csharp",
+  //   language: "csharp",
+  //   logoClass: "csharp",
+  //   options: {
+  //     followRedirect: true,
+  //     trimRequestBody: true,
+  //   },
+  //   variant: "RestSharp",
+  // },
+  // {
+  //   highlight: "php",
+  //   language: "php",
+  //   logoClass: "php",
+  //   options: {
+  //     followRedirect: true,
+  //     trimRequestBody: true,
+  //   },
+  //   variant: "cURL",
+  // },
 ];
 
 interface Props {
@@ -121,6 +119,12 @@ function CodeTab({ children, hidden, className, onClick }: any): JSX.Element {
 
 function Curl({ postman, codeSamples }: Props) {
   // TODO: match theme for vscode.
+
+  const collapsableRef = useRef<HTMLDivElement>(null);
+  const [rawResponse, setRawResponse] = useState("");
+  const [responseOption, setResponseOption] =
+    useState<ResponseOption>("collapsable");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { siteConfig } = useDocusaurusContext();
 
@@ -156,6 +160,8 @@ function Curl({ postman, codeSamples }: Props) {
   });
 
   const [codeText, setCodeText] = useState("");
+  const [curlCodeText, setCurlCodeText] = useState("");
+  const [responseState, setResponseState] = useState<ResponsedState>("no");
 
   useEffect(() => {
     if (language && !!language.options) {
@@ -170,6 +176,19 @@ function Curl({ postman, codeSamples }: Props) {
         server,
         auth,
       });
+
+      codegen.convert(
+        languageSet[0].language,
+        languageSet[0].variant,
+        postmanRequest,
+        languageSet[0].options,
+        (error: any, snippet: string) => {
+          if (error) {
+            return;
+          }
+          setCurlCodeText(snippet);
+        }
+      );
 
       codegen.convert(
         language.language,
@@ -222,6 +241,7 @@ function Curl({ postman, codeSamples }: Props) {
       setCodeText("");
     }
   }, [
+    defaultLang,
     accept,
     body,
     contentType,
@@ -234,6 +254,29 @@ function Curl({ postman, codeSamples }: Props) {
     server,
     auth,
   ]);
+
+  const handleRequest = async () => {
+    setIsLoading(true);
+    try {
+      const fetchText = cURL_to_fetch(curlCodeText, false);
+      const firstResponse = await eval(`${fetchText}`); // eslint-disable-line
+      const response = await firstResponse.json();
+      setResponseState("success");
+
+      const formatter = new JSONFormatter(response);
+
+      if (collapsableRef.current) {
+        collapsableRef.current.innerHTML = "";
+        collapsableRef.current.appendChild(formatter.render());
+      }
+      setRawResponse(JSON.stringify(response, null, 4));
+    } catch (e) {
+      console.log("error on request", e);
+      setResponseState("error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (language === undefined) {
     return null;
@@ -259,6 +302,67 @@ function Curl({ postman, codeSamples }: Props) {
           );
         })}
       </CodeTabs>
+
+      <div>
+        <button
+          className={clsx(styles.executeButton_fetch)}
+          onClick={handleRequest}
+        >
+          {isLoading ? (
+            <div className={clsx(styles.response_loader)} />
+          ) : (
+            "Execute request"
+          )}
+        </button>
+
+        <div
+          className={clsx(styles.execute_result)}
+          style={{ display: responseState !== "no" ? "flex" : "none" }}
+        >
+          <div className={clsx(styles.executeOptions)}>
+            <div
+              onClick={() => setResponseOption("collapsable")}
+              className={clsx(
+                styles.executeOption,
+                responseOption === "collapsable" && styles.executeOptionSelected
+              )}
+            >
+              Collapsable
+            </div>
+            <div
+              onClick={() => setResponseOption("raw")}
+              className={clsx(
+                styles.executeOption,
+                responseOption === "raw" && styles.executeOptionSelected
+              )}
+            >
+              Raw
+            </div>
+          </div>
+
+          <div
+            style={{ display: responseState === "success" ? "block" : "none" }}
+            className={clsx(styles.executeResponseText)}
+          >
+            {responseOption === "raw" && (
+              <CodeBlock
+                className={clsx(styles.noMarginBottom)}
+                language="json"
+              >
+                {rawResponse}
+              </CodeBlock>
+            )}
+          </div>
+
+          <div
+            className={clsx(styles.executeResponseText)}
+            ref={collapsableRef}
+            style={{
+              display: responseOption === "collapsable" ? "block" : "none",
+            }}
+          />
+        </div>
+      </div>
     </>
   );
 }
