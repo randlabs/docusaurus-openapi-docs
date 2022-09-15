@@ -1,0 +1,32 @@
+name: "NPM Publish Action"
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    name: "Publish npm"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "checkout"
+        uses: actions/checkout@v3
+
+      - name: "node setup"
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Login to Github's NPM registry
+        run: printf "@randlabs:registry=https://npm.pkg.github.com \n//npm.pkg.github.com/:_authToken=${{secrets.PUBLISH_TOKEN}}" > .npmrc
+
+      - name: Install all dependencies
+        run: yarn
+
+      - name: Build lib
+        run: yarn build
+        working-directory: packages/docusaurus-theme-openapi-docs
+
+      - name: Publish package
+        run: npm publish
+        working-directory: packages/docusaurus-theme-openapi-docs
