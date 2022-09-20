@@ -162,6 +162,7 @@ function Curl({ postman, codeSamples }: Props) {
   const [codeText, setCodeText] = useState("");
   const [curlCodeText, setCurlCodeText] = useState("");
   const [responseState, setResponseState] = useState<ResponsedState>("no");
+  const [responseStatus, setResponseStatus] = useState(0);
 
   useEffect(() => {
     if (language && !!language.options) {
@@ -262,6 +263,7 @@ function Curl({ postman, codeSamples }: Props) {
       const firstResponse = await eval(`${fetchText}`); // eslint-disable-line
       const response = await firstResponse.json();
       setResponseState("success");
+      setResponseStatus(firstResponse.status);
 
       const formatter = new JSONFormatter(response);
 
@@ -314,6 +316,10 @@ function Curl({ postman, codeSamples }: Props) {
             "Execute request"
           )}
         </button>
+
+        {responseState !== "no" && (
+          <div className={clsx(styles.result_status)}>{responseStatus}</div>
+        )}
 
         <div
           className={clsx(styles.execute_result)}
