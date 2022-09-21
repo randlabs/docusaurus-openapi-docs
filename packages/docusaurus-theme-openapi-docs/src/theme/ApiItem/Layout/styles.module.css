@@ -57,7 +57,7 @@
 
 :global(.theme-api-markdown details) {
   margin: unset;
-  max-width: 600px;
+  max-width: 100%;
   background-color: transparent;
   color: var(--ifm-font-color-base);
   padding: unset;
@@ -127,8 +127,29 @@
   margin-right: 1rem;
 }
 
+:global(.theme-api-markdown .details__response-right) {
+  display: flex;
+  margin-bottom: 16px;
+  margin-right: 16px;
+}
+
+:global(.theme-api-markdown .details__response-right > .success) {
+  background-color: var(--ifm-color-success-light);
+}
+
+:global(.theme-api-markdown .details__response-right > .fail) {
+  background-color: var(--ifm-color-danger-light);
+}
+
+:global(.theme-api-markdown .details__response-status) {
+  margin-right: 10px;
+  padding-left: 6px;
+  padding-right: 6px;
+  border-radius: 8px;
+}
+
 :global(.theme-api-markdown code) {
-  max-width: 600px;
+  max-width: 100%;
   max-height: 500px;
   overflow: auto;
 }

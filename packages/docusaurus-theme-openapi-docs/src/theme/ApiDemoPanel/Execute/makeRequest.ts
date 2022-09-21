@@ -188,8 +188,9 @@ async function makeRequest(
   }
 
   return await fetchWithtimeout(finalUrl, requestOptions).then(
-    (response: any) => {
-      return response.text();
+    async (response: any) => {
+      const responseText = await response.text();
+      return [response.status, responseText];
     }
   );
 }

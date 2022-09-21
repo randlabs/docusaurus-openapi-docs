@@ -113,14 +113,14 @@ function Execute({ postman, proxy }: Props) {
         className="button button--sm button--secondary"
         disabled={!isValidRequest}
         onClick={async () => {
-          dispatch(setResponse("Fetching..."));
+          dispatch(setResponse([undefined, "Fetching..."]));
           try {
             await delay(1200);
             const res = await makeRequest(postmanRequest, proxy, body);
             dispatch(setResponse(res));
           } catch (e: any) {
             console.log(e);
-            dispatch(setResponse("Connection failed"));
+            dispatch(setResponse([undefined, "Connection failed"]));
           }
         }}
       >

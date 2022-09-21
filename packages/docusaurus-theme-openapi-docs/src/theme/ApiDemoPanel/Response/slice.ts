@@ -9,6 +9,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface State {
   value?: string;
+  status?: number | undefined;
 }
 
 const initialState: State = {} as any;
@@ -17,10 +18,15 @@ export const slice = createSlice({
   name: "response",
   initialState,
   reducers: {
-    setResponse: (state, action: PayloadAction<string>) => {
-      state.value = action.payload;
+    setResponse: (
+      state,
+      action: PayloadAction<[number | undefined, string]>
+    ) => {
+      state.status = action.payload[0];
+      state.value = action.payload[1];
     },
     clearResponse: (state) => {
+      state.status = undefined;
       state.value = undefined;
     },
   },

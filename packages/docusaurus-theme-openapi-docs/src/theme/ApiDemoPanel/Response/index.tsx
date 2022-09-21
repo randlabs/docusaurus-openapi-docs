@@ -34,6 +34,8 @@ function formatXml(xml: string) {
 
 function Response() {
   const response = useTypedSelector((state) => state.response.value);
+  const responseStatus = useTypedSelector((state) => state.response.status);
+
   const dispatch = useTypedDispatch();
 
   if (response === undefined) {
@@ -54,12 +56,25 @@ function Response() {
       <summary>
         <div className={`details__response-summary`}>
           <h4>Response</h4>
-          <button
-            className="button button--sm button--secondary"
-            onClick={() => dispatch(clearResponse())}
-          >
-            Clear
-          </button>
+          <div className={`details__response-right`}>
+            {responseStatus && (
+              <div
+                className={`details__response-status ${
+                  responseStatus >= 200 && responseStatus < 300
+                    ? "success"
+                    : "fail"
+                }`}
+              >
+                {responseStatus}
+              </div>
+            )}
+            <button
+              className="button button--sm button--secondary"
+              onClick={() => dispatch(clearResponse())}
+            >
+              Clear
+            </button>
+          </div>
         </div>
       </summary>
       <CodeBlock language={response.startsWith("<") ? `xml` : `json`}>

@@ -3520,7 +3520,7 @@
     path-browserify "1.0.1"
     yaml "1.10.2"
 
-"@paloaltonetworks/postman-code-generators@^1.1.12":
+"@paloaltonetworks/postman-code-generators@^1.1.12", "@paloaltonetworks/postman-code-generators@^1.1.9":
   version "1.1.12"
   resolved "https://registry.yarnpkg.com/@paloaltonetworks/postman-code-generators/-/postman-code-generators-1.1.12.tgz#04d7f2e4d22acfad3c3f3f115c24a31d80b8a20a"
   integrity sha512-IsDqZxzTDVhpezPQV+pqzkq8MTKpcMRlgCiM1rTFqc13+swp3e87eaFUDk4ketbYWOBcN+WhaY2DslikUWtY6A==
@@ -6844,6 +6844,31 @@ doctrine@^3.0.0:
   integrity sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
   dependencies:
     esutils "^2.0.2"
+
+docusaurus-theme-openapi-docs@^1.1.12:
+  version "1.1.12"
+  resolved "https://registry.yarnpkg.com/docusaurus-theme-openapi-docs/-/docusaurus-theme-openapi-docs-1.1.12.tgz#247fd8c72709f7f8f82275bbfe4f011c73b5d0fc"
+  integrity sha512-4k1G+oQ8dyc8KPRPL24hzJVns2J2cjfHqoCa34x7BcWRMxC2VRQSaoMt+dSEBUSfBIu5wbw4tw2pM9tX53V4fg==
+  dependencies:
+    "@docusaurus/theme-common" "^2.0.1"
+    "@mdx-js/react" "^1.6.21"
+    "@paloaltonetworks/postman-code-generators" "^1.1.9"
+    "@paloaltonetworks/postman-collection" "^4.1.0"
+    "@reduxjs/toolkit" "^1.7.1"
+    buffer "^6.0.3"
+    clsx "^1.1.1"
+    crypto-js "^4.1.1"
+    docusaurus-plugin-openapi-docs "^1.1.12"
+    immer "^9.0.7"
+    lodash "^4.17.20"
+    process "^0.11.10"
+    react-live "^3.1.1"
+    react-magic-dropzone "^1.0.1"
+    react-markdown "^8.0.1"
+    react-redux "^7.2.0"
+    redux-devtools-extension "^2.13.8"
+    webpack "^5.61.0"
+    xml-formatter "^2.6.1"
 
 dom-accessibility-api@^0.5.6, dom-accessibility-api@^0.5.9:
   version "0.5.14"
