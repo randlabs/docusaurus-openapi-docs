@@ -1,7 +1,7 @@
 {
   "name": "@randlabs/docusaurus-theme-openapi-docs",
   "description": "OpenAPI theme for Docusaurus.",
-  "version": "1.2.0.r1",
+  "version": "1.2.0",
   "license": "MIT",
   "keywords": [
     "openapi",
