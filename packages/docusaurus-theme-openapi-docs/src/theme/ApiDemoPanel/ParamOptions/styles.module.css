@@ -159,6 +159,7 @@
 
 .input {
   composes: inputBase;
+  border: 1px solid var(--ifm-color-gray-400);
 }
 
 .input:focus {
