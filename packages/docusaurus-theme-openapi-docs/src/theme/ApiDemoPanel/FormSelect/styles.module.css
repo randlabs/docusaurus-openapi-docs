@@ -16,7 +16,7 @@ html[data-theme="dark"] .selectInput {
   margin-top: calc(var(--ifm-pre-padding) / 2);
   /* height: 40px; */
   background-color: var(--openapi-input-background);
-  border: none;
+  border: 1px solid var(--ifm-color-gray-400);
   outline: none;
   width: 100%;
   font-size: var(--ifm-code-font-size);
@@ -44,6 +44,11 @@ html[data-theme="dark"] .selectInput {
   background-repeat: no-repeat;
   background-position: right var(--ifm-pre-padding) top 50%;
   background-size: auto auto;
+  border: 1px solid var(--ifm-color-gray-400);
+}
+
+.selectInput option {
+  color: var(--ifm-color-gray-800);
 }
 
 .selectInput:focus {

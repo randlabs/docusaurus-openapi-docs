@@ -18,11 +18,12 @@
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
+  border: 1px solid var(--ifm-color-gray-400);
 }
 
 .selectInput option {
   border-radius: 0.25rem;
-  color: var(--ifm-menu-color);
+  color: var(--ifm-color-gray-800);
   margin: 0.25rem 0;
   padding: var(--ifm-menu-link-padding-vertical)
     var(--ifm-menu-link-padding-horizontal);
